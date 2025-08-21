@@ -1,0 +1,80 @@
+﻿@page
+@model WebApplication2.Pages.Users.IndexModel
+@{
+    ViewData["Title"] = "Users Manager";
+}
+
+<h2>User Management</h2>
+
+<form method="post" asp-page-handler="Save">
+    <h4>@Model.ActionMode User</h4>
+    <div class="mb-2">
+        <label>UserName</label>
+        @if (Model.ActionMode == "Edit")
+        {
+            <input asp-for="FormUser.UserName" class="form-control" readonly /> 
+        }
+        else
+        {
+            <input asp-for="FormUser.UserName" class="form-control" /> 
+        }
+
+    </div>
+    <div class="mb-2">
+        <label>First Name</label>
+        <input asp-for="FormUser.FirstName" class="form-control" />
+    </div>
+    <div class="mb-2">
+        <label>Surname</label>
+        <input asp-for="FormUser.Surname" class="form-control" /> 
+    </div>
+    <div class="mb-2">
+        <label>Email</label>
+        <input asp-for="FormUser.Email" class="form-control" />
+    </div>
+
+    <div class="form-check mb-2"> 
+        <input type="checkbox" asp-for="FormUser.Active" class="form-check-input" />
+        <label class="form-check-label">Active</label>
+    </div>
+    <button type="submit" class="btn btn-primary">@Model.ActionMode</button>
+    <a asp-page="./Index" class="btn btn-secondary">Clear</a>
+</form>
+
+<hr />
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>UserName</th>
+            <th>First</th>
+            <th>Surname</th>
+            <th>Email</th>
+            <th>Active</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var u in Model.Users)
+{
+        <tr>
+            <td>@u.UserName</td>
+            <td>@u.FirstName</td>
+            <td>@u.Surname</td>
+            <td>@u.Email</td>
+            <td>@u.Active</td>
+            <td>
+                <form method="post" asp-page-handler="Edit" style="display:inline">
+                    <input type="hidden" name="username" value="@u.UserName" />
+                    <button type="submit" class="btn btn-sm btn-info">Edit</button>
+                </form>
+                <form method="post" asp-page-handler="Delete" style="display:inline">
+                    <input type="hidden" name="username" value="@u.UserName" />
+                    <button type="submit" class="btn btn-sm btn-danger"
+                            onclick="return confirm('Delete @u.UserName?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
